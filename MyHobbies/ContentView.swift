@@ -232,15 +232,21 @@ struct ActivityDetailView: View {
         })
         .sheet(isPresented: $showDatePicker) {
             VStack {
+                Spacer()
                 DatePicker("Выберите время", selection: $reminderDate, displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
                     .datePickerStyle(WheelDatePickerStyle())
+                    .environment(\.locale, Locale(identifier: "ru_RU"))
                 Button("Установить напоминание") {
                     requestNotificationPermission {_ in 
                         self.scheduleNotification(for: activity, at: reminderDate)
                         self.showDatePicker = false
                     }
                 }
+                Spacer()
+                Button("Отмена") { // This is the new cancel button
+                            self.showDatePicker = false
+                        }
             }
         }
         
