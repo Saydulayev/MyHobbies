@@ -7,10 +7,13 @@
 
 import SwiftUI
 import SwiftUICharts
+import UserNotifications
+
 
 
 struct ContentView: View {
     @ObservedObject var activities = Activities()
+    
     @State private var editMode: EditMode = .inactive
     @State private var isEditing = false
     @State private var showingAddActivity = false
@@ -51,8 +54,10 @@ struct ContentView: View {
     func activities(for category: ActivityCategory) -> [Activity] {
         return activities.items.filter { $0.category == category }
     }
+    
 }
 
+// MARK: - ActivityCategory
 enum ActivityCategory: String, CaseIterable, Codable {
     case fitness = "Спорт"
     case study = "Учеба"
@@ -62,14 +67,14 @@ enum ActivityCategory: String, CaseIterable, Codable {
     case others = "Другое"
     // и так далее
 }
-
+// MARK: - TimeRange
 enum TimeRange: String, CaseIterable {
     case week = "Недельная"
     case month = "Месячная"
     case year = "Годовая"
 }
 
-
+// MARK: - Activity
 struct Activity: Identifiable, Codable, Equatable {
     var id: UUID = UUID()
     var title: String
@@ -79,6 +84,7 @@ struct Activity: Identifiable, Codable, Equatable {
     var category: ActivityCategory
 }
 
+// MARK: - Activities
 class Activities: ObservableObject {
     @Published var items: [Activity] = [] {
         didSet {
@@ -101,7 +107,7 @@ class Activities: ObservableObject {
     }
 }
 
-
+// MARK: - AddActivityView
 struct AddActivityView: View {
     @ObservedObject var activities: Activities
     @Environment(\.presentationMode) var presentationMode
@@ -115,6 +121,7 @@ struct AddActivityView: View {
             Form {
                 TextField("Название", text: $title)
                 TextField("Описание", text: $description)
+                
                 
                 Picker("Категория", selection: $selectedCategory) {
                     ForEach(ActivityCategory.allCases, id: \.self) { category in
@@ -134,25 +141,27 @@ struct AddActivityView: View {
     }
 }
 
-
+// MARK: - ActivityDetailView
 struct ActivityDetailView: View {
     let activity: Activity
+    
     @ObservedObject var activities: Activities
     
     @State private var selectedTimeRange: TimeRange = .week
+    @State private var showDatePicker = false
+    @State private var reminderDate = Date()
+    
     
     var body: some View {
         VStack {
             Text(activity.title)
                 .font(.largeTitle)
                 .fontWeight(.bold)
-                .shadow(color: Color.orange, radius: 2, x: 0, y: 2)
-                .padding(.top)
-            
-            Text(activity.description)
                 .padding()
             
-            // Добавляем селектор временного диапазона
+            Text(activity.description)
+                .underline()
+            
             Picker("Период времени", selection: $selectedTimeRange) {
                 ForEach(TimeRange.allCases, id: \.self) { range in
                     Text(range.rawValue).tag(range)
@@ -162,7 +171,7 @@ struct ActivityDetailView: View {
             .padding()
             
             BarChartView(data: ChartData(points: getData(for: selectedTimeRange)), title: "\(selectedTimeRange.rawValue) статистика", style: ChartStyle(backgroundColor: .white, accentColor: .blue, secondGradientColor: .green, textColor: .black, legendTextColor: .gray, dropShadowColor: .yellow))
-            
+                .padding()
             HStack {
                 // Кнопка уменьшения
                 Button(action: {
@@ -216,10 +225,29 @@ struct ActivityDetailView: View {
             .padding()
             
         }
+        
         .navigationBarItems(trailing:
                                 NavigationLink(destination: EditActivityView(activity: activity, activities: activities)) {
             Text("Редактировать")
         })
+        .sheet(isPresented: $showDatePicker) {
+            VStack {
+                DatePicker("Выберите время", selection: $reminderDate, displayedComponents: [.date, .hourAndMinute])
+                    .labelsHidden()
+                    .datePickerStyle(WheelDatePickerStyle())
+                Button("Установить напоминание") {
+                    requestNotificationPermission {_ in 
+                        self.scheduleNotification(for: activity, at: reminderDate)
+                        self.showDatePicker = false
+                    }
+                }
+            }
+        }
+        
+        Button("Добавить напоминание") {
+            self.showDatePicker.toggle()
+        }
+        .foregroundColor(.orange)
     }
     
     func getData(for timeRange: TimeRange) -> [Double] {
@@ -250,6 +278,7 @@ struct ActivityDetailView: View {
         
         return dataPoints.reversed()
     }
+    
     func pluralForm(for count: Int) -> String {
         if count % 10 == 1 && count % 100 != 11 {
             return "раз"
@@ -259,10 +288,66 @@ struct ActivityDetailView: View {
             return "раз"
         }
     }
-
+    
+    
+    func scheduleNotification(for activity: Activity, at date: Date) {
+        let center = UNUserNotificationCenter.current()
+        
+        center.getNotificationSettings { settings in
+            switch settings.authorizationStatus {
+            case .notDetermined, .denied:
+                self.requestNotificationPermission(completion: { granted in
+                    if granted {
+                        self.addNotification(for: activity, at: date, with: center)
+                    } else {
+                        print("Permission denied!")
+                    }
+                })
+            case .authorized, .provisional:
+                self.addNotification(for: activity, at: date, with: center)
+            case .ephemeral:
+                print("Ephemeral authorization not handled.")
+            @unknown default:
+                print("Unknown authorization status.")
+            }
+        }
+    }
+    
+    private func addNotification(for activity: Activity, at date: Date, with center: UNUserNotificationCenter) {
+        let content = UNMutableNotificationContent()
+        content.title = "Напоминание о активности!"
+        content.body = "\(activity.title)"
+        content.categoryIdentifier = "alarm"
+        content.userInfo = ["activityID": activity.id.uuidString]
+        content.sound = UNNotificationSound.default
+        
+        let triggerDateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        center.add(request) { (error) in
+            if let error = error {
+                print("Error adding notification: \(error.localizedDescription)")
+            } else {
+                DispatchQueue.main.async {
+                    print("Напоминание успешно добавлено!")
+                }
+            }
+        }
+    }
+    private func requestNotificationPermission(completion: @escaping (Bool) -> Void) {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            if let error = error {
+                print("Error requesting notifications permission: \(error)")
+            }
+            DispatchQueue.main.async {
+                completion(granted)
+            }
+        }
+    }
 }
 
-
+// MARK: - ActivitiesView
 struct ActivitiesView: View {
     @ObservedObject var activities: Activities
     @State private var selectedCategory: ActivityCategory? = nil
@@ -304,7 +389,7 @@ struct ActivitiesView: View {
     }
 }
 
-
+// MARK: - EditActivityView
 struct EditActivityView: View {
     @ObservedObject var activities: Activities
     @Environment(\.presentationMode) var presentationMode
@@ -348,13 +433,15 @@ struct EditActivityView: View {
     }
 }
 
-
+// MARK: - Calendar Extension
 extension Calendar {
     func startOfMonth(for date: Date) -> Date {
         let components = self.dateComponents([.year, .month], from: date)
         return self.date(from: components) ?? date
     }
 }
+
+
 
 
 
