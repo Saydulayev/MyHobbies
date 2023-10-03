@@ -187,6 +187,7 @@ struct ActivityDetailView: View {
             .pickerStyle(SegmentedPickerStyle())
             .padding()
             
+            // График активности за выбранный период времени.
             BarChartView(data: ChartData(points: getData(for: selectedTimeRange)), title: "\(selectedTimeRange.rawValue) статистика", style: ChartStyle(backgroundColor: .white, accentColor: .blue, secondGradientColor: .green, textColor: .black, legendTextColor: .gray, dropShadowColor: .yellow))
                 .padding()
             HStack {
@@ -194,7 +195,7 @@ struct ActivityDetailView: View {
                 Button(action: {
                     guard let index = activities.items.firstIndex(of: activity) else { return }
                     var updatedActivity = activity
-                    if updatedActivity.completionCount > 0 { // Чтобы убедиться, что у нас не будет отрицательного значения
+                    if updatedActivity.completionCount > 0 {
                         updatedActivity.completionCount -= 1
                         activities.items[index] = updatedActivity
                     }
@@ -242,14 +243,16 @@ struct ActivityDetailView: View {
             .padding()
             
         }
-        
+        // Кнопка редактирования активности в навигационной панели.
         .navigationBarItems(trailing:
                                 NavigationLink(destination: EditActivityView(activity: activity, activities: activities)) {
             Text("Редактировать")
         })
+        // Модальное окно для установки напоминаний.
         .sheet(isPresented: $showDatePicker) {
             VStack {
                 Spacer()
+                // Выбор даты и времени напоминания.
                 DatePicker("Выберите время", selection: $reminderDate, displayedComponents: [.date, .hourAndMinute])
                     .labelsHidden()
                     .datePickerStyle(WheelDatePickerStyle())
@@ -261,7 +264,7 @@ struct ActivityDetailView: View {
                     }
                 }
                 Spacer()
-                Button("Отмена") { // This is the new cancel button
+                Button("Отмена") {
                     self.showDatePicker = false
                 }
             }
@@ -272,7 +275,7 @@ struct ActivityDetailView: View {
         }
         .foregroundColor(.orange)
     }
-    
+    // Получение данных для графика в зависимости от выбранного периода времени.
     func getData(for timeRange: TimeRange) -> [Double] {
         var dataPoints: [Double] = []
         let calendar = Calendar.current
@@ -302,6 +305,7 @@ struct ActivityDetailView: View {
         return dataPoints.reversed()
     }
     
+    // Определение правильной формы слова "раз" в зависимости от количества.
     func pluralForm(for count: Int) -> String {
         if count % 10 == 1 && count % 100 != 11 {
             return "раз"
@@ -312,7 +316,7 @@ struct ActivityDetailView: View {
         }
     }
     
-    
+    // Планирование уведомления для активности.
     func scheduleNotification(for activity: Activity, at date: Date) {
         let center = UNUserNotificationCenter.current()
         
@@ -336,6 +340,7 @@ struct ActivityDetailView: View {
         }
     }
     
+    // Добавление уведомления.
     private func addNotification(for activity: Activity, at date: Date, with center: UNUserNotificationCenter) {
         let content = UNMutableNotificationContent()
         content.title = "Напоминание о активности!"
@@ -358,6 +363,8 @@ struct ActivityDetailView: View {
             }
         }
     }
+    
+    // Запрос разрешения на отправку уведомлений.
     private func requestNotificationPermission(completion: @escaping (Bool) -> Void) {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
             if let error = error {
