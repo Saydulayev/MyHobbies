@@ -18,7 +18,12 @@ struct ContentView: View {
     @State private var isEditing = false
     @State private var showingAddActivity = false
     
-    
+//    List {
+//        ForEach(activities.items) { activity in
+//            NavigationLink(destination: ActivityDetailView(activity: activity, activities: activities)) {
+//                Text(activity.title)
+//            }
+//        }
     
     var body: some View {
         NavigationView {
@@ -27,14 +32,13 @@ struct ContentView: View {
                     if let activitiesInCategory = groupedActivities()[category], !activitiesInCategory.isEmpty {
                         Section(header: Text(category.rawValue)) {
                             ForEach(activitiesInCategory) { activity in
-                                NavigationLink(destination: EditActivityView(activity: activity, activities: self.activities)) {
+                                NavigationLink(destination: ActivityDetailView(activity: activity, activities: self.activities)) {
                                     Text(activity.title)
                                 }
                             }
                         }
                     }
                 }
-                
                 .onDelete(perform: removeItems)
                 .onMove(perform: moveItems)
             }
