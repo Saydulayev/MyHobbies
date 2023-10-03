@@ -23,12 +23,20 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(activities.items) { activity in
-                    NavigationLink(destination: ActivityDetailView(activity: activity, activities: activities)) {
-                        Text(activity.title)
+                ForEach(ActivityCategory.allCases, id: \.self) { category in
+                    if let activitiesInCategory = groupedActivities()[category], !activitiesInCategory.isEmpty {
+                        Section(header: Text(category.rawValue)) {
+                            ForEach(activitiesInCategory) { activity in
+                                NavigationLink(destination: EditActivityView(activity: activity, activities: self.activities)) {
+                                    Text(activity.title)
+                                }
+                            }
+                        }
                     }
                 }
+                
                 .onDelete(perform: removeItems)
+                .onMove(perform: moveItems)
             }
             .navigationBarTitle("Активности")
             .navigationBarItems(leading: Button(action: {
@@ -54,7 +62,12 @@ struct ContentView: View {
     func activities(for category: ActivityCategory) -> [Activity] {
         return activities.items.filter { $0.category == category }
     }
-    
+    func moveItems(from source: IndexSet, to destination: Int) {
+        activities.items.move(fromOffsets: source, toOffset: destination)
+    }
+    func groupedActivities() -> [ActivityCategory: [Activity]] {
+        return Dictionary(grouping: activities.items) { $0.category }
+    }
 }
 
 // MARK: - ActivityCategory
@@ -238,15 +251,15 @@ struct ActivityDetailView: View {
                     .datePickerStyle(WheelDatePickerStyle())
                     .environment(\.locale, Locale(identifier: "ru_RU"))
                 Button("Установить напоминание") {
-                    requestNotificationPermission {_ in 
+                    requestNotificationPermission {_ in
                         self.scheduleNotification(for: activity, at: reminderDate)
                         self.showDatePicker = false
                     }
                 }
                 Spacer()
                 Button("Отмена") { // This is the new cancel button
-                            self.showDatePicker = false
-                        }
+                    self.showDatePicker = false
+                }
             }
         }
         
