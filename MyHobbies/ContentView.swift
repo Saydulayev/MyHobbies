@@ -30,10 +30,13 @@ struct ContentView: View {
             List {
                 ForEach(ActivityCategory.allCases, id: \.self) { category in
                     if let activitiesInCategory = groupedActivities()[category], !activitiesInCategory.isEmpty {
-                        Section(header: Text(category.rawValue)) {
+                        Section(header: Text(category.rawValue).bold().foregroundColor(.orange)) {
                             ForEach(activitiesInCategory) { activity in
                                 NavigationLink(destination: ActivityDetailView(activity: activity, activities: self.activities)) {
                                     Text(activity.title)
+                                        .padding(10)
+                                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue).opacity(0.1))
+                                        .foregroundColor(.blue)
                                 }
                             }
                         }
@@ -42,24 +45,33 @@ struct ContentView: View {
                 .onDelete(perform: removeItems)
                 .onMove(perform: moveItems)
             }
-            .navigationBarTitle("Активности")
+            .navigationBarTitle("Активности", displayMode: .large)
             .navigationBarItems(leading: Button(action: {
-                self.isEditing.toggle()
+                withAnimation {
+                    self.isEditing.toggle()
+                }
             }, label: {
-                Text(isEditing ? "Готово" : "Изменить")
-            }), trailing:
+                withAnimation {
+                    Text(isEditing ? Image(systemName: "list.bullet.indent"): Image(systemName: "list.bullet"))
+                }
+            }).foregroundColor(.blue), trailing:
                                     Button(action: {
-                self.showingAddActivity = true
-            }) {
-                Image(systemName: "plus")
-            }
+                                        withAnimation {
+                                            self.showingAddActivity = true
+                                        }
+                                    }) {
+                                        Image(systemName: "plus")
+                                    }.foregroundColor(.blue)
             )
             .environment(\.editMode, isEditing ? Binding.constant(.active) : Binding.constant(.inactive))
             .sheet(isPresented: $showingAddActivity) {
                 AddActivityView(activities: activities)
             }
         }
+        .accentColor(.yellow)
     }
+
+    
     func removeItems(at offsets: IndexSet) {
         activities.items.remove(atOffsets: offsets)
     }
