@@ -18,6 +18,7 @@ struct ContentView: View {
     @State private var isEditing = false
     @State private var showingAddActivity = false
     
+    
 //    List {
 //        ForEach(activities.items) { activity in
 //            NavigationLink(destination: ActivityDetailView(activity: activity, activities: activities)) {
@@ -30,13 +31,15 @@ struct ContentView: View {
             List {
                 ForEach(ActivityCategory.allCases, id: \.self) { category in
                     if let activitiesInCategory = groupedActivities()[category], !activitiesInCategory.isEmpty {
-                        Section(header: Text(category.rawValue).bold().foregroundColor(.orange)) {
+                        Section(header: Text(category.rawValue).bold().foregroundColor(.secondary)) {
                             ForEach(activitiesInCategory) { activity in
                                 NavigationLink(destination: ActivityDetailView(activity: activity, activities: self.activities)) {
                                     Text(activity.title)
-                                        .padding(10)
-                                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue).opacity(0.1))
-                                        .foregroundColor(.blue)
+                                        .font(.headline)
+                                        .foregroundColor(.indigo)
+                                        
+//                                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue).opacity(0.1))
+//                                        .foregroundColor(.blue)
                                 }
                             }
                         }
@@ -54,21 +57,21 @@ struct ContentView: View {
                 withAnimation {
                     Text(isEditing ? Image(systemName: "list.bullet.indent"): Image(systemName: "list.bullet"))
                 }
-            }).foregroundColor(.blue), trailing:
+            }).foregroundColor(.indigo), trailing:
                                     Button(action: {
                                         withAnimation {
                                             self.showingAddActivity = true
                                         }
                                     }) {
                                         Image(systemName: "plus")
-                                    }.foregroundColor(.blue)
+                                    }.foregroundColor(.indigo)
             )
             .environment(\.editMode, isEditing ? Binding.constant(.active) : Binding.constant(.inactive))
             .sheet(isPresented: $showingAddActivity) {
                 AddActivityView(activities: activities)
             }
         }
-        .accentColor(.yellow)
+        .accentColor(.indigo)
     }
 
     
@@ -188,6 +191,8 @@ struct ActivityDetailView: View {
                 .fontWeight(.bold)
                 .padding()
             
+                
+            
             Text(activity.description)
                 .underline()
             
@@ -200,7 +205,7 @@ struct ActivityDetailView: View {
             .padding()
             
             // График активности за выбранный период времени.
-            BarChartView(data: ChartData(points: getData(for: selectedTimeRange)), title: "\(selectedTimeRange.rawValue) статистика", style: ChartStyle(backgroundColor: .white, accentColor: .blue, secondGradientColor: .green, textColor: .black, legendTextColor: .gray, dropShadowColor: .yellow))
+            BarChartView(data: ChartData(points: getData(for: selectedTimeRange)), title: "\(selectedTimeRange.rawValue) статистика", style: ChartStyle(backgroundColor: .white, accentColor: .blue, secondGradientColor: .green, textColor: .black, legendTextColor: .gray, dropShadowColor: .indigo))
                 .padding()
             HStack {
                 // Кнопка уменьшения
@@ -248,7 +253,7 @@ struct ActivityDetailView: View {
                 Text("Сбросить")
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.orange)
+                    .background(.regularMaterial)
                     .foregroundColor(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
             }
@@ -285,7 +290,7 @@ struct ActivityDetailView: View {
         Button("Добавить напоминание") {
             self.showDatePicker.toggle()
         }
-        .foregroundColor(.orange)
+        .foregroundColor(.indigo)
     }
     // Получение данных для графика в зависимости от выбранного периода времени.
     func getData(for timeRange: TimeRange) -> [Double] {
