@@ -18,14 +18,6 @@ struct ContentView: View {
     @State private var isEditing = false
     @State private var showingAddActivity = false
     
-    
-//    List {
-//        ForEach(activities.items) { activity in
-//            NavigationLink(destination: ActivityDetailView(activity: activity, activities: activities)) {
-//                Text(activity.title)
-//            }
-//        }
-    
     var body: some View {
         NavigationView {
             List {
@@ -37,16 +29,22 @@ struct ContentView: View {
                                     Text(activity.title)
                                         .font(.headline)
                                         .foregroundColor(.indigo)
-                                        
-//                                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.blue).opacity(0.1))
-//                                        .foregroundColor(.blue)
                                 }
                             }
+                            .onDelete { (offsets) in
+                                for offset in offsets {
+                                    let activityToRemove = activitiesInCategory[offset]
+                                    if let globalIndex = activities.items.firstIndex(where: { $0.id == activityToRemove.id }) {
+                                        activities.items.remove(at: globalIndex)
+                                    }
+                                }
+                            }
+                            .onMove(perform: { (source, destination) in
+                                moveItems(from: source, to: destination, within: category)
+                            })
                         }
                     }
                 }
-                .onDelete(perform: removeItems)
-                .onMove(perform: moveItems)
             }
             .navigationBarTitle("Активности", displayMode: .large)
             .navigationBarItems(leading: Button(action: {
@@ -73,17 +71,26 @@ struct ContentView: View {
         }
         .accentColor(.indigo)
     }
-
     
+    func moveItems(from source: IndexSet, to destination: Int, within category: ActivityCategory) {
+        var activitiesInCategory = activities(for: category)
+        let _: () = activitiesInCategory.move(fromOffsets: source, toOffset: destination)
+        
+        // Updating the main activities list
+        activities.items = activities.items.filter { $0.category != category }
+        activities.items.append(contentsOf: activitiesInCategory)
+    }
+
+
+
     func removeItems(at offsets: IndexSet) {
         activities.items.remove(atOffsets: offsets)
     }
+    
     func activities(for category: ActivityCategory) -> [Activity] {
         return activities.items.filter { $0.category == category }
     }
-    func moveItems(from source: IndexSet, to destination: Int) {
-        activities.items.move(fromOffsets: source, toOffset: destination)
-    }
+    
     func groupedActivities() -> [ActivityCategory: [Activity]] {
         return Dictionary(grouping: activities.items) { $0.category }
     }
