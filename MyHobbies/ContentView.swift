@@ -11,6 +11,24 @@ import UserNotifications
 
 
 
+// MARK: - ActivityCategory
+enum ActivityCategory: String, CaseIterable, Codable {
+    case fitness = "Спорт"
+    case study = "Учеба"
+    case hobby = "Хобби"
+    case religion = "Религия"
+    case job = "Работа"
+    case others = "Другое"
+    // и так далее
+}
+// MARK: - TimeRange
+enum TimeRange: String, CaseIterable {
+    case week = "Недельная"
+    case month = "Месячная"
+    case year = "Годовая"
+}
+
+
 struct ContentView: View {
     @ObservedObject var activities = Activities()
     
@@ -96,22 +114,7 @@ struct ContentView: View {
     }
 }
 
-// MARK: - ActivityCategory
-enum ActivityCategory: String, CaseIterable, Codable {
-    case fitness = "Спорт"
-    case study = "Учеба"
-    case hobby = "Хобби"
-    case religion = "Религия"
-    case job = "Работа"
-    case others = "Другое"
-    // и так далее
-}
-// MARK: - TimeRange
-enum TimeRange: String, CaseIterable {
-    case week = "Недельная"
-    case month = "Месячная"
-    case year = "Годовая"
-}
+
 
 // MARK: - Activity
 struct Activity: Identifiable, Codable, Equatable {
@@ -121,63 +124,6 @@ struct Activity: Identifiable, Codable, Equatable {
     var completionCount: Int = 0
     var history: [Date: Int] = [:]
     var category: ActivityCategory
-}
-
-// MARK: - Activities
-class Activities: ObservableObject {
-    @Published var items: [Activity] = [] {
-        didSet {
-            let encoder = JSONEncoder()
-            if let encoded = try? encoder.encode(items) {
-                UserDefaults.standard.setValue(encoded, forKey: "Activities")
-            }
-        }
-    }
-    
-    init() {
-        if let items = UserDefaults.standard.data(forKey: "Activities") {
-            let decoder = JSONDecoder()
-            if let decoded = try? decoder.decode([Activity].self, from: items) {
-                self.items = decoded
-                return
-            }
-        }
-        self.items = []
-    }
-}
-
-// MARK: - AddActivityView
-struct AddActivityView: View {
-    @ObservedObject var activities: Activities
-    @Environment(\.presentationMode) var presentationMode
-    
-    @State private var title = ""
-    @State private var description = ""
-    @State private var selectedCategory = ActivityCategory.fitness
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                TextField("Название", text: $title)
-                TextField("Описание", text: $description)
-                
-                
-                Picker("Категория", selection: $selectedCategory) {
-                    ForEach(ActivityCategory.allCases, id: \.self) { category in
-                        Text(category.rawValue).tag(category)
-                    }
-                }
-            }
-            .navigationBarTitle("Добавить активность")
-            .navigationBarItems(leading: Button("Отменить") {
-                presentationMode.wrappedValue.dismiss()
-            }, trailing: Button("Сохранить") {
-                let activity = Activity(title: title, description: description, category: selectedCategory)
-                activities.items.append(activity)
-                presentationMode.wrappedValue.dismiss()
-            })
-        }
-    }
 }
 
 // MARK: - ActivityDetailView
@@ -401,6 +347,40 @@ struct ActivityDetailView: View {
     }
 }
 
+// MARK: - AddActivityView
+struct AddActivityView: View {
+    @ObservedObject var activities: Activities
+    @Environment(\.presentationMode) var presentationMode
+    
+    @State private var title = ""
+    @State private var description = ""
+    @State private var selectedCategory = ActivityCategory.fitness
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                TextField("Название", text: $title)
+                TextField("Описание", text: $description)
+                
+                
+                Picker("Категория", selection: $selectedCategory) {
+                    ForEach(ActivityCategory.allCases, id: \.self) { category in
+                        Text(category.rawValue).tag(category)
+                    }
+                }
+            }
+            .navigationBarTitle("Добавить активность")
+            .navigationBarItems(leading: Button("Отменить") {
+                presentationMode.wrappedValue.dismiss()
+            }, trailing: Button("Сохранить") {
+                let activity = Activity(title: title, description: description, category: selectedCategory)
+                activities.items.append(activity)
+                presentationMode.wrappedValue.dismiss()
+            })
+        }
+    }
+}
+
 // MARK: - ActivitiesView
 struct ActivitiesView: View {
     @ObservedObject var activities: Activities
@@ -472,7 +452,8 @@ struct EditActivityView: View {
                     }
                 }
             }
-            .navigationBarTitle("Редактировать активность")
+            .navigationBarTitle("Редактировать")
+            .padding(.vertical)
             .navigationBarItems(leading: Button("Отменить") {
                 presentationMode.wrappedValue.dismiss()
             }, trailing: Button("Сохранить") {
@@ -486,6 +467,30 @@ struct EditActivityView: View {
         }
     }
 }
+
+// MARK: - Activities
+class Activities: ObservableObject {
+    @Published var items: [Activity] = [] {
+        didSet {
+            let encoder = JSONEncoder()
+            if let encoded = try? encoder.encode(items) {
+                UserDefaults.standard.setValue(encoded, forKey: "Activities")
+            }
+        }
+    }
+    
+    init() {
+        if let items = UserDefaults.standard.data(forKey: "Activities") {
+            let decoder = JSONDecoder()
+            if let decoded = try? decoder.decode([Activity].self, from: items) {
+                self.items = decoded
+                return
+            }
+        }
+        self.items = []
+    }
+}
+
 
 // MARK: - Calendar Extension
 extension Calendar {

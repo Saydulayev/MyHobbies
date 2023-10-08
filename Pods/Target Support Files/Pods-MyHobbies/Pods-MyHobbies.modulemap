@@ -1,0 +1,6 @@
+framework module Pods_MyHobbies {
+  umbrella header "Pods-MyHobbies-umbrella.h"
+
+  export *
+  module * { export * }
+}
