@@ -6,12 +6,41 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct MainTabView: View {
+    @State private var selectedTab = 0
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        TabView(selection: $selectedTab) {
+            ContentView()
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Главная")
+                }
+                .tag(0)
+
+            if Auth.auth().currentUser != nil {
+                ProfileView() // Представление профиля пользователя
+                    .tabItem {
+                        Image(systemName: "person.fill")
+                        Text("Аккаунт")
+                    }
+                    .tag(1)
+            } else {
+                AuthenticationView()
+                    .tabItem {
+                        Image(systemName: "person.fill")
+                        Text("Войти")
+                    }
+                    .tag(1)
+            }
+        }
+        .accentColor(.white)
     }
 }
+
+
 
 #Preview {
     MainTabView()

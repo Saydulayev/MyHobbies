@@ -36,6 +36,7 @@ struct ContentView: View {
     @State private var isEditing = false
     @State private var showingAddActivity = false
     
+    
     var body: some View {
         NavigationView {
             List {
@@ -129,7 +130,7 @@ struct Activity: Identifiable, Codable, Equatable {
 // MARK: - ActivityDetailView
 struct ActivityDetailView: View {
     let activity: Activity
-    
+
     @ObservedObject var activities: Activities
     
     @State private var selectedTimeRange: TimeRange = .week
@@ -138,112 +139,112 @@ struct ActivityDetailView: View {
     
     
     var body: some View {
-        VStack {
-            Text(activity.title)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
-            
-                
-            
-            Text(activity.description)
-                .underline()
-            
-            Picker("Период времени", selection: $selectedTimeRange) {
-                ForEach(TimeRange.allCases, id: \.self) { range in
-                    Text(range.rawValue).tag(range)
-                }
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
-            
-            // График активности за выбранный период времени.
-            BarChartView(data: ChartData(points: getData(for: selectedTimeRange)), title: "\(selectedTimeRange.rawValue) статистика", style: ChartStyle(backgroundColor: .white, accentColor: .blue, secondGradientColor: .green, textColor: .black, legendTextColor: .gray, dropShadowColor: .indigo))
-                .padding()
-            HStack {
-                // Кнопка уменьшения
-                Button(action: {
-                    guard let index = activities.items.firstIndex(of: activity) else { return }
-                    var updatedActivity = activity
-                    if updatedActivity.completionCount > 0 {
-                        updatedActivity.completionCount -= 1
-                        activities.items[index] = updatedActivity
-                    }
-                }) {
-                    Text("-")
-                        .frame(width: 30, height: 30)
-                        .background(Color.red)
-                        .foregroundColor(.white)
-                        .clipShape(Circle())
-                }
-                
-                Text("\(activity.completionCount) \(pluralForm(for: activity.completionCount))")
-                    .underline()
+        ScrollView {
+            VStack {
+                Text(activity.title)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
                     .padding()
-                // Кнопка увеличения
+                Text(activity.description)
+                    .underline()
+                
+                Picker("Период времени", selection: $selectedTimeRange) {
+                    ForEach(TimeRange.allCases, id: \.self) { range in
+                        Text(range.rawValue).tag(range)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                .padding()
+                
+                // График активности за выбранный период времени.
+                BarChartView(data: ChartData(points: getData(for: selectedTimeRange)), title: "\(selectedTimeRange.rawValue) статистика", style: ChartStyle(backgroundColor: .white, accentColor: .blue, secondGradientColor: .green, textColor: .black, legendTextColor: .gray, dropShadowColor: .indigo))
+                    .padding()
+                HStack {
+                    // Кнопка уменьшения
+                    Button(action: {
+                        guard let index = activities.items.firstIndex(of: activity) else { return }
+                        var updatedActivity = activity
+                        if updatedActivity.completionCount > 0 {
+                            updatedActivity.completionCount -= 1
+                            activities.items[index] = updatedActivity
+                        }
+                    }) {
+                        Text("-")
+                            .frame(width: 30, height: 30)
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .clipShape(Circle())
+                    }
+                    
+                    Text("\(activity.completionCount) \(pluralForm(for: activity.completionCount))")
+                        .underline()
+                        .padding()
+                    // Кнопка увеличения
+                    Button(action: {
+                        guard let index = activities.items.firstIndex(of: activity) else { return }
+                        var updatedActivity = activity
+                        updatedActivity.completionCount += 1
+                        activities.items[index] = updatedActivity
+                    }) {
+                        Text("+")
+                            .frame(width: 30, height: 30)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .clipShape(Circle())
+                    }
+                }
+                .padding()
+                // Кнопка сброса
                 Button(action: {
                     guard let index = activities.items.firstIndex(of: activity) else { return }
                     var updatedActivity = activity
-                    updatedActivity.completionCount += 1
+                    updatedActivity.completionCount = 0
                     activities.items[index] = updatedActivity
                 }) {
-                    Text("+")
-                        .frame(width: 30, height: 30)
-                        .background(Color.green)
+                    Text("Сбросить")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(.regularMaterial)
                         .foregroundColor(.white)
-                        .clipShape(Circle())
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
-            }
-            .padding()
-            
-            // Кнопка сброса
-            Button(action: {
-                guard let index = activities.items.firstIndex(of: activity) else { return }
-                var updatedActivity = activity
-                updatedActivity.completionCount = 0
-                activities.items[index] = updatedActivity
-            }) {
-                Text("Сбросить")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.regularMaterial)
-                    .foregroundColor(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-            }
-            .padding()
-            
-        }
-        // Кнопка редактирования активности в навигационной панели.
-        .navigationBarItems(trailing:
-                                NavigationLink(destination: EditActivityView(activity: activity, activities: activities)) {
-            Text("Редактировать")
-        })
-        // Модальное окно для установки напоминаний.
-        .sheet(isPresented: $showDatePicker) {
-            VStack {
-                Spacer()
-                // Выбор даты и времени напоминания.
-                DatePicker("Выберите время", selection: $reminderDate, displayedComponents: [.date, .hourAndMinute])
-                    .labelsHidden()
-                    .datePickerStyle(WheelDatePickerStyle())
-                    .environment(\.locale, Locale(identifier: "ru_RU"))
-                Button("Установить напоминание") {
-                    requestNotificationPermission {_ in
-                        self.scheduleNotification(for: activity, at: reminderDate)
-                        self.showDatePicker = false
+                            // Модальное окно для установки напоминаний.
+                .sheet(isPresented: $showDatePicker) {
+                    VStack {
+                        Spacer()
+                        // Выбор даты и времени напоминания.
+                        DatePicker("Выберите время", selection: $reminderDate, displayedComponents: [.date, .hourAndMinute])
+                            .labelsHidden()
+                            .datePickerStyle(WheelDatePickerStyle())
+                            .environment(\.locale, Locale(identifier: "ru_RU"))
+                        Button("Установить напоминание") {
+                            requestNotificationPermission {_ in
+                                self.scheduleNotification(for: activity, at: reminderDate)
+                                self.showDatePicker = false
+                            }
+                        }
+                        Spacer()
+                        Button("Отмена") {
+                            self.showDatePicker = false
+                        }
                     }
                 }
-                Spacer()
-                Button("Отмена") {
-                    self.showDatePicker = false
+                
+                Button("Добавить напоминание") {
+                    self.showDatePicker.toggle()
                 }
+                .foregroundColor(.indigo)
             }
+            
+            
+            
+
+            // Кнопка редактирования активности в навигационной панели.
+            .navigationBarItems(trailing:
+                                    NavigationLink(destination: EditActivityView(activity: activity, activities: activities)) {
+                Text("Редактировать")
+        })
         }
-        
-        Button("Добавить напоминание") {
-            self.showDatePicker.toggle()
-        }
-        .foregroundColor(.indigo)
     }
     // Получение данных для графика в зависимости от выбранного периода времени.
     func getData(for timeRange: TimeRange) -> [Double] {
@@ -505,8 +506,6 @@ extension Calendar {
 
 
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+#Preview {
+    MainTabView()
 }

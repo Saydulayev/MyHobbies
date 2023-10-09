@@ -8,11 +8,34 @@
 import SwiftUI
 
 struct AnimatedText: View {
+    let text: String
+    @State private var visibleCharacters: Int = 0
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack(spacing: 0) {
+            ForEach(Array(text.enumerated()), id: \.offset) { offset, character in
+                Text(String(character))
+                    .opacity(offset < visibleCharacters ? 1 : 0)
+            }
+        }
+        .onAppear {
+            let total = text.count
+
+            Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
+                withAnimation {
+                    visibleCharacters += 1
+                }
+
+                if visibleCharacters >= total {
+                    timer.invalidate()
+                }
+            }
+        }
     }
 }
 
+
+
 #Preview {
-    AnimatedText()
+    AnimatedText(text: "")
 }
