@@ -2,18 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>917070278437-6tj46rdfi65nmoumd3ljhp0f8mmj8tq7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.917070278437-6tj46rdfi65nmoumd3ljhp0f8mmj8tq7</string>
 	<key>API_KEY</key>
-	<string>AIzaSyB7B7C8XPzoGb_ObLy9prli8Zly9B2f7zs</string>
+	<string>AIzaSyCOHS-d_kIQtpJZP3UExexxY1ZTSRz5-1M</string>
 	<key>GCM_SENDER_ID</key>
-	<string>767008397493</string>
+	<string>917070278437</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>saydulayev.wien-gmail.com.MyHobbies</string>
 	<key>PROJECT_ID</key>
-	<string>myhobbies-16e08</string>
+	<string>myhobbiesapp</string>
 	<key>STORAGE_BUCKET</key>
-	<string>myhobbies-16e08.appspot.com</string>
+	<string>myhobbiesapp.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:767008397493:ios:d36062ea8aee1833a7c6fc</string>
+	<string>1:917070278437:ios:dba3260343f7d944f0b4cc</string>
 </dict>
 </plist>
