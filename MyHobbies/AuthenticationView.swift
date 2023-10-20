@@ -114,7 +114,8 @@ struct ProfileView: View {
             Button(action: {
                 try? Auth.auth().signOut()
             }) {
-                Text("Выход")
+                Text("Выход").bold()
+                    .font(.headline)
                     .foregroundColor(.black)
                     .padding(40)
                     .background(.thinMaterial)

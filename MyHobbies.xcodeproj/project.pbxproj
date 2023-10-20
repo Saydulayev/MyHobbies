@@ -14,6 +14,11 @@
 		C05CA57E2AC41B170018585C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C05CA57D2AC41B170018585C /* Preview Assets.xcassets */; };
 		C05CA5862AC41C5C0018585C /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = C05CA5852AC41C5C0018585C /* SwiftUICharts */; };
 		C0730B192AD4679B0044ACDE /* AnimatedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0730B182AD4679B0044ACDE /* AnimatedText.swift */; };
+		C0730B1B2AD545E00044ACDE /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0730B1A2AD545E00044ACDE /* Activity.swift */; };
+		C0730B1D2AD5460C0044ACDE /* AddActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0730B1C2AD5460C0044ACDE /* AddActivityView.swift */; };
+		C0730B1F2AD546470044ACDE /* ActivitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0730B1E2AD546470044ACDE /* ActivitiesView.swift */; };
+		C0730B212AD546690044ACDE /* EditActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0730B202AD546690044ACDE /* EditActivityView.swift */; };
+		C0730B232AD546EB0044ACDE /* ActivityDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0730B222AD546EB0044ACDE /* ActivityDetailView.swift */; };
 		C08D5F702AD3E9CE00853A19 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = C08D5F6F2AD3E9CE00853A19 /* FirebaseAnalytics */; };
 		C08D5F722AD3E9CE00853A19 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = C08D5F712AD3E9CE00853A19 /* FirebaseAnalyticsOnDeviceConversion */; };
 		C08D5F742AD3E9CE00853A19 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C08D5F732AD3E9CE00853A19 /* FirebaseAnalyticsSwift */; };
@@ -43,6 +48,7 @@
 		C08D5FA42AD3E9CE00853A19 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = C08D5FA32AD3E9CE00853A19 /* FirebaseStorageCombine-Community */; };
 		C08D5FA62AD3EB4600853A19 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D5FA52AD3EB4600853A19 /* MainTabView.swift */; };
 		C08D5FAA2AD3F99000853A19 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C08D5FA92AD3F99000853A19 /* GoogleService-Info.plist */; };
+		C09E36222AD550D100AF10F3 /* ContributionChart in Frameworks */ = {isa = PBXBuildFile; productRef = C09E36212AD550D100AF10F3 /* ContributionChart */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +59,11 @@
 		C05CA57A2AC41B170018585C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C05CA57D2AC41B170018585C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C0730B182AD4679B0044ACDE /* AnimatedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedText.swift; sourceTree = "<group>"; };
+		C0730B1A2AD545E00044ACDE /* Activity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		C0730B1C2AD5460C0044ACDE /* AddActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddActivityView.swift; sourceTree = "<group>"; };
+		C0730B1E2AD546470044ACDE /* ActivitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivitiesView.swift; sourceTree = "<group>"; };
+		C0730B202AD546690044ACDE /* EditActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditActivityView.swift; sourceTree = "<group>"; };
+		C0730B222AD546EB0044ACDE /* ActivityDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityDetailView.swift; sourceTree = "<group>"; };
 		C08D5FA52AD3EB4600853A19 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		C08D5FA92AD3F99000853A19 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -80,6 +91,7 @@
 				C08D5F922AD3E9CE00853A19 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				C08D5F902AD3E9CE00853A19 /* FirebaseFunctionsCombine-Community in Frameworks */,
 				C08D5F802AD3E9CE00853A19 /* FirebaseCrashlytics in Frameworks */,
+				C09E36222AD550D100AF10F3 /* ContributionChart in Frameworks */,
 				C08D5F962AD3E9CE00853A19 /* FirebaseInstallations in Frameworks */,
 				C08D5F9E2AD3E9CE00853A19 /* FirebaseRemoteConfig in Frameworks */,
 				C08D5FA22AD3E9CE00853A19 /* FirebaseStorage in Frameworks */,
@@ -117,9 +129,14 @@
 			children = (
 				C05CA5762AC41B150018585C /* MyHobbiesApp.swift */,
 				C05CA5782AC41B150018585C /* ContentView.swift */,
+				C0730B222AD546EB0044ACDE /* ActivityDetailView.swift */,
 				C04F4D542AD31EE1001A31EA /* AuthenticationView.swift */,
 				C08D5FA52AD3EB4600853A19 /* MainTabView.swift */,
+				C0730B1C2AD5460C0044ACDE /* AddActivityView.swift */,
+				C0730B1E2AD546470044ACDE /* ActivitiesView.swift */,
+				C0730B202AD546690044ACDE /* EditActivityView.swift */,
 				C0730B182AD4679B0044ACDE /* AnimatedText.swift */,
+				C0730B1A2AD545E00044ACDE /* Activity.swift */,
 				C08D5FA92AD3F99000853A19 /* GoogleService-Info.plist */,
 				C05CA57A2AC41B170018585C /* Assets.xcassets */,
 				C05CA57C2AC41B170018585C /* Preview Content */,
@@ -180,6 +197,7 @@
 				C08D5F9F2AD3E9CE00853A19 /* FirebaseRemoteConfigSwift */,
 				C08D5FA12AD3E9CE00853A19 /* FirebaseStorage */,
 				C08D5FA32AD3E9CE00853A19 /* FirebaseStorageCombine-Community */,
+				C09E36212AD550D100AF10F3 /* ContributionChart */,
 			);
 			productName = MyHobbies;
 			productReference = C05CA5732AC41B150018585C /* MyHobbies.app */;
@@ -212,6 +230,7 @@
 			packageReferences = (
 				C05CA5842AC41C5C0018585C /* XCRemoteSwiftPackageReference "ChartView" */,
 				C08D5F6E2AD3E9CE00853A19 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				C09E36202AD550D100AF10F3 /* XCRemoteSwiftPackageReference "SwiftUI-ContributionChart" */,
 			);
 			productRefGroup = C05CA5742AC41B150018585C /* Products */;
 			projectDirPath = "";
@@ -240,11 +259,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C0730B1B2AD545E00044ACDE /* Activity.swift in Sources */,
+				C0730B1D2AD5460C0044ACDE /* AddActivityView.swift in Sources */,
 				C05CA5792AC41B150018585C /* ContentView.swift in Sources */,
 				C0730B192AD4679B0044ACDE /* AnimatedText.swift in Sources */,
 				C05CA5772AC41B150018585C /* MyHobbiesApp.swift in Sources */,
 				C04F4D552AD31EE1001A31EA /* AuthenticationView.swift in Sources */,
 				C08D5FA62AD3EB4600853A19 /* MainTabView.swift in Sources */,
+				C0730B1F2AD546470044ACDE /* ActivitiesView.swift in Sources */,
+				C0730B232AD546EB0044ACDE /* ActivityDetailView.swift in Sources */,
+				C0730B212AD546690044ACDE /* EditActivityView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,6 +491,14 @@
 				minimumVersion = 10.16.0;
 			};
 		};
+		C09E36202AD550D100AF10F3 /* XCRemoteSwiftPackageReference "SwiftUI-ContributionChart" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/VIkill33/SwiftUI-ContributionChart";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -609,6 +641,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C08D5F6E2AD3E9CE00853A19 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		C09E36212AD550D100AF10F3 /* ContributionChart */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C09E36202AD550D100AF10F3 /* XCRemoteSwiftPackageReference "SwiftUI-ContributionChart" */;
+			productName = ContributionChart;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

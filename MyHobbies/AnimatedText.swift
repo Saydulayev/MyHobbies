@@ -13,15 +13,17 @@ struct AnimatedText: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(Array(text.enumerated()), id: \.offset) { offset, character in
-                Text(String(character))
-                    .opacity(offset < visibleCharacters ? 1 : 0)
+            withAnimation {
+                ForEach(Array(text.enumerated()), id: \.offset) { offset, character in
+                    Text(String(character))
+                        .opacity(offset < visibleCharacters ? 1 : 0)
+                }
             }
         }
         .onAppear {
             let total = text.count
 
-            Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
+            Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
                 withAnimation {
                     visibleCharacters += 1
                 }
