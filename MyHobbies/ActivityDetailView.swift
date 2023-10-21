@@ -7,12 +7,13 @@
 
 import SwiftUI
 import SwiftUICharts
-import ContributionChart
 
 
 // MARK: - ActivityDetailView
 struct ActivityDetailView: View {
     let activity: Activity
+    
+    @Environment(\.colorScheme) var colorScheme
 
     @ObservedObject var activities: Activities
     
@@ -30,8 +31,7 @@ struct ActivityDetailView: View {
                     .fontWeight(.bold)
                     .padding()
                 Text(activity.description)
-                    .underline()
-                
+                Divider()
                 Picker("Период времени", selection: $selectedTimeRange) {
                     ForEach(TimeRange.allCases, id: \.self) { range in
                         Text(range.rawValue).tag(range)
@@ -41,9 +41,10 @@ struct ActivityDetailView: View {
                 .padding()
                 
                 // График активности за выбранный период времени.
-                BarChartView(data: ChartData(points: getData(for: selectedTimeRange)), title: "\(selectedTimeRange.rawValue) статистика", style: ChartStyle(backgroundColor: .white, accentColor: .blue, secondGradientColor: .green, textColor: .black, legendTextColor: .gray, dropShadowColor: .indigo))
+                BarChartView(data: ChartData(points: getData(for: selectedTimeRange)), title: "Статистика", style: ChartStyle(backgroundColor: .white, accentColor: .blue, secondGradientColor: .green, textColor: .black, legendTextColor: .gray, dropShadowColor: .indigo))
                     .padding()
-                
+
+
                 HStack {
                     // Кнопка уменьшения
                     Button(action: {
@@ -87,11 +88,12 @@ struct ActivityDetailView: View {
                     activities.items[index] = updatedActivity
                 }) {
                     Text("Сбросить")
-                        .frame(maxWidth: .infinity)
+                        
                         .padding()
+                        .foregroundColor(colorScheme == .dark ? .white : .black)
                         .background(.regularMaterial)
-                        .foregroundColor(.white)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .shadow(color: .indigo, radius: 3)
                 }
                             // Модальное окно для установки напоминаний.
                 .sheet(isPresented: $showDatePicker) {
@@ -262,7 +264,7 @@ enum ActivityCategory: String, CaseIterable, Codable {
 }
 // MARK: - TimeRange
 enum TimeRange: String, CaseIterable {
-    case week = "Недельная"
-    case month = "Месячная"
-    case year = "Годовая"
+    case week = "Неделя"
+    case month = "Месяц"
+    case year = "Год"
 }

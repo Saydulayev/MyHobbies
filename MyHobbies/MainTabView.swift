@@ -11,6 +11,8 @@ import FirebaseAuth
 struct MainTabView: View {
     @State private var selectedTab = 0
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         TabView(selection: $selectedTab) {
             ContentView()
@@ -36,7 +38,7 @@ struct MainTabView: View {
                     .tag(1)
             }
         }
-        .accentColor(.white)
+        .accentColor(colorScheme == .dark ? .white : .black)
     }
 }
 

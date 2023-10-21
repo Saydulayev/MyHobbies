@@ -48,7 +48,6 @@
 		C08D5FA42AD3E9CE00853A19 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = C08D5FA32AD3E9CE00853A19 /* FirebaseStorageCombine-Community */; };
 		C08D5FA62AD3EB4600853A19 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08D5FA52AD3EB4600853A19 /* MainTabView.swift */; };
 		C08D5FAA2AD3F99000853A19 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C08D5FA92AD3F99000853A19 /* GoogleService-Info.plist */; };
-		C09E36222AD550D100AF10F3 /* ContributionChart in Frameworks */ = {isa = PBXBuildFile; productRef = C09E36212AD550D100AF10F3 /* ContributionChart */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,7 +90,6 @@
 				C08D5F922AD3E9CE00853A19 /* FirebaseInAppMessaging-Beta in Frameworks */,
 				C08D5F902AD3E9CE00853A19 /* FirebaseFunctionsCombine-Community in Frameworks */,
 				C08D5F802AD3E9CE00853A19 /* FirebaseCrashlytics in Frameworks */,
-				C09E36222AD550D100AF10F3 /* ContributionChart in Frameworks */,
 				C08D5F962AD3E9CE00853A19 /* FirebaseInstallations in Frameworks */,
 				C08D5F9E2AD3E9CE00853A19 /* FirebaseRemoteConfig in Frameworks */,
 				C08D5FA22AD3E9CE00853A19 /* FirebaseStorage in Frameworks */,
@@ -197,7 +195,6 @@
 				C08D5F9F2AD3E9CE00853A19 /* FirebaseRemoteConfigSwift */,
 				C08D5FA12AD3E9CE00853A19 /* FirebaseStorage */,
 				C08D5FA32AD3E9CE00853A19 /* FirebaseStorageCombine-Community */,
-				C09E36212AD550D100AF10F3 /* ContributionChart */,
 			);
 			productName = MyHobbies;
 			productReference = C05CA5732AC41B150018585C /* MyHobbies.app */;
@@ -230,7 +227,6 @@
 			packageReferences = (
 				C05CA5842AC41C5C0018585C /* XCRemoteSwiftPackageReference "ChartView" */,
 				C08D5F6E2AD3E9CE00853A19 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				C09E36202AD550D100AF10F3 /* XCRemoteSwiftPackageReference "SwiftUI-ContributionChart" */,
 			);
 			productRefGroup = C05CA5742AC41B150018585C /* Products */;
 			projectDirPath = "";
@@ -491,14 +487,6 @@
 				minimumVersion = 10.16.0;
 			};
 		};
-		C09E36202AD550D100AF10F3 /* XCRemoteSwiftPackageReference "SwiftUI-ContributionChart" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/VIkill33/SwiftUI-ContributionChart";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -641,11 +629,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C08D5F6E2AD3E9CE00853A19 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
-		};
-		C09E36212AD550D100AF10F3 /* ContributionChart */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C09E36202AD550D100AF10F3 /* XCRemoteSwiftPackageReference "SwiftUI-ContributionChart" */;
-			productName = ContributionChart;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

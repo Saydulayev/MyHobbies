@@ -116,15 +116,6 @@
         "revision" : "3c54ab05249f59f2c6641dd2920b8358ea9ed127",
         "version" : "1.24.0"
       }
-    },
-    {
-      "identity" : "swiftui-contributionchart",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/VIkill33/SwiftUI-ContributionChart",
-      "state" : {
-        "revision" : "8091d51a4aaa06028cd922d4ac89163e754b37d9",
-        "version" : "1.0.2"
-      }
     }
   ],
   "version" : 2
